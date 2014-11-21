@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Viewer</title>
+    <link rel="stylesheet" href="json-tree.css">
+    <style>
+        table tr td {
+            display: inline-block;
+            vertical-align: top;
+            width: inherit;
+            min-width: 30em;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-app="myApp">
+    <div ng-controller="myCtrl">
+            <tr>
+                <td><json-tree json="jsonData" node="nodeOptions" edit-level="low" collapsed-level="10"></json-tree></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+<script src="json-tree.js"></script>
+<script>
+    (function(){
+
+        var myApp = angular.module('myApp', ['json-tree']);
+
+        myApp.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
+
+                $http.get('http://localhost:8082/api').
+                        success(function (data) {
+                            $scope.jsonData = data;
+                            $scope.nodeOptions.refresh();
+                        }).error(function () {
+                            alert("Server error!");
+                        });
+
+                // Needed for the first view to be created.
+                function defaultData() {
+                    return {
+                    };
+                }
+                $scope.jsonData = defaultData();
+        }])
+    })()
+</script>
+</body>
+</html>
