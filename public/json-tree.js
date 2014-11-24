@@ -14,15 +14,15 @@
                 '<span ng-bind="utils.wrap.start(node)"></span>' +
                 '<span ng-bind="node.isCollapsed ? utils.wrap.middle(node) : \'&nbsp;&nbsp;&nbsp;\'" ng-click="utils.clickNode(node)"></span>' +
                 '<ul ng-hide="node.isCollapsed">' +
+                    '<i class="icon-caret-down"></i>' +
                     '<li ng-repeat="key in utils.keys(json) track by key">' +
-                            '<span  class="key" ng-click="utils.clickNode(childs[key])" >{{ key }}: </span>' +
+                            '<span  class="key" ng-click="utils.clickNode(childs[key])" >{{ key }} </span>' +
                             '<span ng-hide="childs[key].isObject()">' +
                                 '<input ng-show="childs[key].type() === \'boolean\'" type="checkbox" ng-model="json[key]"/>' +
                                 '<input ng-show="childs[key].type() === \'number\'" type="number" ng-model="json[key]"/>' +
-                                '<textarea ng-if="childs[key].type() === \'function\'" ng-model="jsonFn[key]" ng-init="utils.textarea.init(key)" ng-change="utils.textarea.onChange(key)" ng-focus="utils.textarea.onFocus($event, key)" ng-blur="utils.textarea.onBlur(key)"></textarea>' +
-                                '<input ng-show="childs[key].type() !== \'number\' && childs[key].type() !== \'function\'" type="text" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null"/>' +
+                                '<input ng-show="childs[key].type() !== \'number\'" type="text" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null"/>' +
                             '</span>' +
-                            '<json-tree json="json[key]" edit-level="{{editLevel}}" collapsed-level="{{+collapsedLevel - 1}}" node="childs[key]" ng-show="childs[key].isObject()"></json-tree>' +
+                            '<json-tree json="json[key]" collapsed-level="{{+collapsedLevel - 1}}" node="childs[key]" ng-show="childs[key].isObject()"></json-tree>' +
                     '</li>' +
                 '</ul>' +
                 '<span ng-bind="utils.wrap.end(node)"></span>';
@@ -42,16 +42,12 @@
                     json: '=',
                     node: '=?',
                     childs: '=?',
-                    editLevel: '@',
                     collapsedLevel: '@'
                 },
                 controller: function($scope){
 
                     /* initialize container for child nodes */
                     $scope.childs = {};
-
-                    /* initialize container for nodes with functions */
-                    $scope.jsonFn = {};
 
                     /* define auxiliary functions */
                     $scope.utils = {
@@ -83,7 +79,7 @@
                                 };
                             },
                             isLastIndex: function(node, index){
-                                if (node === undefined || node === null) return true
+                                if (node === undefined || node === null) return true;
                                 else return index >= node.length();
                             }
                         },
@@ -113,18 +109,10 @@
 
                             /* try to parse string to json */
                             else {
-                                if ($scope.node.isHighEditLevel){ /* if high editable level */
-                                    try {
-                                        var json = JSON.parse($scope.json[key]);
-                                        $scope.json[key] = json;
-                                        $scope.refresh();
-                                    } catch (e){}
-                                } else { /* if low editable level */
-                                    /* check if boolean input -> then refresh */
-                                    if ($scope.json[key] === "true" || $scope.json[key] === "false") {
-                                        $scope.json[key] = JSON.parse($scope.json[key]);
-                                        $scope.refresh();
-                                    }
+                                /* check if boolean input -> then refresh */
+                                if ($scope.json[key] === "true" || $scope.json[key] === "false") {
+                                    $scope.json[key] = JSON.parse($scope.json[key]);
+                                    $scope.refresh();
                                 }
                             }
                         },
@@ -153,9 +141,6 @@
 
                         /* check node is collapsed */
                         isCollapsed: ($scope.collapsedLevel && +$scope.collapsedLevel) ? (+$scope.collapsedLevel <= 0) : true, /* set up isCollapsed properties, by default - true */
-
-                        /* check editing level is high */
-                        isHighEditLevel: $scope.editLevel !== "low",
 
                         /* if childs[key] is dragging now, dragChildKey matches to key  */
                         dragChildKey: null,
