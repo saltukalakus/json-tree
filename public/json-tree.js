@@ -1,3 +1,14 @@
+/*!
+ * Json Tree viewer
+ *
+ * Copyright 2014 Konstantin Skipor
+ *
+ * Modified by Saltuk Alakus
+ * https://github.com/saltukalakus/json-tree
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 (function(){
 
     'use strict';

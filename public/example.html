@@ -42,6 +42,8 @@
 
                 $http.get('http://localhost:8082/api').
                         success(function (data) {
+                            console.log("this is the data");
+                            console.log(data);
                             $scope.jsonData = data;
                             $scope.nodeOptions.refresh();
                         }).error(function () {
