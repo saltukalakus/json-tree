@@ -4,15 +4,30 @@
     <title>JSON Viewer</title>
     <link rel="stylesheet" href="css/bootstrap.dark.min.css" type="text/css">
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <style>
+        ul { padding-left:20px; list-style:none; }
+        li { margin-bottom:10px; }
+    </style>
 </head>
 <body>
 
 <div ng-app="myApp">
     <div ng-controller="myCtrl">
-            <tr>
-                <td><json-tree json="jsonData" node="nodeOptions" edit-level="low" collapsed-level="10"></json-tree></td>
-            </tr>
-        </table>
+        <div class="container">
+            <div class="center-block">
+                <div class="row">
+                    <div class="span2"></div>
+                    <div class="span8">
+                        <table>
+                            <tr>
+                                <td><json-tree json="jsonData" node="nodeOptions" edit-level="low" collapsed-level="10"></json-tree></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="span2"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

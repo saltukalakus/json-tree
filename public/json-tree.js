@@ -11,21 +11,19 @@
         .directive('jsonTree', ['$compile', '$q', '$http', '$templateCache', 'jsonTreeConfig',  function($compile, $q, $http, $templateCache, jsonTreeConfig) {
 
             var template =
-                '<span ng-bind="utils.wrap.start(node)"></span>' +
-                '<span ng-bind="node.isCollapsed ? utils.wrap.middle(node) : \'&nbsp;&nbsp;&nbsp;\'" ng-click="utils.clickNode(node)"></span>' +
                 '<ul ng-hide="node.isCollapsed">' +
-                    '<i class="icon-caret-down"></i>' +
                     '<li ng-repeat="key in utils.keys(json) track by key">' +
-                            '<span  class="key" ng-click="utils.clickNode(childs[key])" >{{ key }} </span>' +
+                            '<span  class="key" ng-click="utils.clickNode(childs[key])" >' +
+                            '<i ng-show="childs[key].isCollapsed && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-plus-sign-alt icon-large"></i>' +
+                            '<i ng-show="childs[key].isCollapsed === false && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-minus-sign-alt icon-large"></i>' +
+                            ' {{ key }} </span>' +
                             '<span ng-hide="childs[key].isObject()">' +
-                                '<input ng-show="childs[key].type() === \'boolean\'" type="checkbox" ng-model="json[key]"/>' +
                                 '<input ng-show="childs[key].type() === \'number\'" type="number" ng-model="json[key]"/>' +
                                 '<input ng-show="childs[key].type() !== \'number\'" type="text" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null"/>' +
                             '</span>' +
                             '<json-tree json="json[key]" collapsed-level="{{+collapsedLevel - 1}}" node="childs[key]" ng-show="childs[key].isObject()"></json-tree>' +
                     '</li>' +
-                '</ul>' +
-                '<span ng-bind="utils.wrap.end(node)"></span>';
+                '</ul>';
             function getTemplatePromise() {
                 if(jsonTreeConfig.templateUrl) return $http.get(jsonTreeConfig.templateUrl, {
                     cache: $templateCache
@@ -57,16 +55,13 @@
                             start: function(node){
                                 if (node === undefined || node === null) return '';
                                 switch (node.type()){
-                                    case 'array': return '[]';
-                                    case 'object': return '{}';
                                     default: return '';
                                 };
                             },
                             middle: function(node){
                                 if (node === undefined || node === null) return '';
+                                console.log(node);
                                 switch (node.type()){
-                                    case 'array': return '...';
-                                    case 'object': return '...';
                                     default: return '';
                                 };
                             },
@@ -106,15 +101,6 @@
                             /* try to convert string to number */
                             else if (!isNaN(+$scope.json[key]) && isFinite($scope.json[key]))
                                 $scope.json[key] = +$scope.json[key];
-
-                            /* try to parse string to json */
-                            else {
-                                /* check if boolean input -> then refresh */
-                                if ($scope.json[key] === "true" || $scope.json[key] === "false") {
-                                    $scope.json[key] = JSON.parse($scope.json[key]);
-                                    $scope.refresh();
-                                }
-                            }
                         },
 
                         /* to skip ordering in ng-repeat */
@@ -130,9 +116,7 @@
                             else if (val.constructor === Object) return 'object'
                             else if (val.constructor === String) return 'string'
                             else if (val.constructor === Number) return 'number'
-                            else if (val.constructor === Boolean) return 'boolean'
-                            else if (val.constructor === Function) return 'function'
-                            else return 'object'
+                            else return 'string'
                         }
                     };
 
