@@ -3,7 +3,7 @@ app = express();
 
 function defaultData() {
     return {
-            key1: 'str',
+            averylogkeydescriptionforview: 'str',
             key2: 12.34,
             key3: null,
             array: [3, 1, 2],

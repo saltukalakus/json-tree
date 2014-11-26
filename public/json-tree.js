@@ -24,15 +24,17 @@
             var template =
                 '<ul ng-hide="node.isCollapsed">' +
                     '<li ng-repeat="key in utils.keys(json) track by key">' +
-                            '<span  class="key" ng-click="utils.clickNode(childs[key])" >' +
+                            '<div  class="key" ng-click="utils.clickNode(childs[key])" >' +
                             '<i ng-show="childs[key].isCollapsed && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-plus-sign-alt icon-large"></i>' +
                             '<i ng-show="childs[key].isCollapsed === false && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-minus-sign-alt icon-large"></i>' +
-                            ' {{ key }} </span>' +
-                            '<span ng-hide="childs[key].isObject()">' +
+                            ' {{ key }} </div>' +
+                            '<div ng-hide="childs[key].isObject()">' +
                                 '<input ng-show="childs[key].type() === \'number\'" type="number" ng-model="json[key]"/>' +
                                 '<input ng-show="childs[key].type() !== \'number\'" type="text" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null"/>' +
-                            '</span>' +
+                            '</div>' +
+                            '<hr ng-show="childs[key].isCollapsed === false && (childs[key].type() === \'object\' || childs[key].type() === \'array\')">' +
                             '<json-tree json="json[key]" collapsed-level="{{+collapsedLevel - 1}}" node="childs[key]" ng-show="childs[key].isObject()"></json-tree>' +
+
                     '</li>' +
                 '</ul>';
             function getTemplatePromise() {
