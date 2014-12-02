@@ -29,9 +29,11 @@
                             '<i ng-show="childs[key].isCollapsed && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-plus-sign-alt icon-large" ></i>' +
                             '<i ng-show="childs[key].isCollapsed === false && (childs[key].type() === \'object\' || childs[key].type() === \'array\')" class="icon-minus-sign-alt icon-large"></i>' +
                             ' {{ key }} </div>' +
+                            '<div class="control">' +
                             '<div ng-hide="childs[key].isObject()">' +
-                                '<input ng-show="childs[key].type() === \'number\'" type="number" ng-model="json[key]" class="form-control" bs-modifiable/>' +
-                                '<input ng-show="childs[key].type() !== \'number\'" type="text" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null" class="form-control" bs-modifiable/>' +
+                                '<input ng-show="childs[key].type() === \'number\'" type="number" id="json[key]" name="json[key]" ng-model="json[key]" class="form-control" bs-modifiable required/>' +
+                                '<input ng-show="childs[key].type() !== \'number\'" type="text" id="json[key]" name="json[key]" ng-model="json[key]" ng-change="utils.validateNode(key)" placeholder="null" class="form-control" bs-modifiable required/>' +
+                            '</div>' +
                             '</div>' +
                             '<json-tree json="json[key]" collapsed-level="{{+collapsedLevel - 1}}" node="childs[key]" ng-show="childs[key].isObject()"></json-tree>' +
                     '</div>' +

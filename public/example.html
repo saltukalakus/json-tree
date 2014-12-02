@@ -34,18 +34,18 @@
                             <button
                                     type="submit"
                                     class="btn btn-warning"
-                                    ng-click="myForm.$setPristine()"
+                                    ng-click="updateChanges()"
                                     ng-disabled="!myForm.modified"
                                     >
-                                Update
+                                Update Changes
                             </button>
                             <button
                                     type="button"
                                     class="btn btn-primary"
                                     ng-disabled="!myForm.modified"
-                                    ng-click="myForm.reset()"
+                                    ng-click="syncLatestFromServer()"
                                     >
-                                Reset
+                                Reset Changes
                             </button>
                         </div>
                     </div>
@@ -88,7 +88,23 @@
                     return {
                     };
                 }
+
                 $scope.jsonData = defaultData();
+
+                $scope.updateChanges = function(){
+                    $scope.myForm.$setPristine();
+                    console.log($scope.jsonData);
+                }
+
+                $scope.syncLatestFromServer = function(){
+                    $http.get('http://localhost:8082/api').
+                            success(function (data) {
+                                $scope.jsonData = data;
+                                $scope.nodeOptions.refresh();
+                            }).error(function () {
+                                alert("Server error!");
+                            });
+                }
         }])
     })()
 </script>
