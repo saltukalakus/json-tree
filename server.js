@@ -41,7 +41,10 @@ function funcData(){
 };
 
 app.get('/api', function(req, res) {
-    res.send(JSON.stringify(defaultData()));
+    //console.log(defaultData());
+    //console.log("***********************");
+    //console.log(JSON.stringify(defaultData()));
+    res.send(defaultData());
     res.end();
 });
 
