@@ -75,7 +75,7 @@
 
         myApp.controller('myCtrl', ['$scope', '$http', function($scope, $http) {
 
-                $http.get('http://localhost:8082/api').
+                $http.get('/api').
                         success(function (data) {
                             $scope.jsonData = data;
                             $scope.nodeOptions.refresh();
@@ -94,6 +94,15 @@
                 $scope.updateChanges = function(){
                     $scope.myForm.$setPristine();
                     console.log($scope.jsonData);
+                    $http({
+                        url: '/api',
+                        method: "POST",
+                        data: JSON.stringify($scope.jsonData),
+                        headers: {'Content-Type': 'application/json'}
+                    }).success(function (data, status, headers, config) {
+                    }).error(function (data, status, headers, config) {
+                        alert("Server error!");
+                    });
                 }
 
                 $scope.syncLatestFromServer = function(){

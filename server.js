@@ -1,5 +1,11 @@
 var express = require('express');
+var morgan       = require('morgan');
+var bodyParser = require('body-parser');
+
 app = express();
+app.use(morgan('dev'));
+app.use(bodyParser.json()); // get information from html forms
+app.use(bodyParser.urlencoded({ extended: true }));
 
 function defaultData() {
     return {
@@ -45,6 +51,11 @@ app.get('/api', function(req, res) {
     //console.log("***********************");
     //console.log(JSON.stringify(defaultData()));
     res.send(defaultData());
+    res.end();
+});
+
+app.post('/api', function(req, res) {
+    console.log(req.body);
     res.end();
 });
 
